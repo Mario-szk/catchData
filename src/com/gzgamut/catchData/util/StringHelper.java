@@ -103,14 +103,19 @@ public class StringHelper {
 		}
 
 		if (unitResult == null) {
+			logger.info("单位为：默认元");
 			return result;// 原本为return null，但考虑到某些报表不写单位，所以默认为以元作为单位
 		} else if (unitResult.equals("元")) {
+			logger.info("单位为：元");
 			return result;
 		} else if (unitResult.equals("千元")) {
+			logger.info("单位为：千元");
 			return result * 1000;
 		} else if (unitResult.equals("万元")) {
+			logger.info("单位为：万元");
 			return result * 10000;
 		} else if (unitResult.equals("百万元")) {
+			logger.info("单位为：百万元");
 			return result * 1000000;
 		}
 		return result;
