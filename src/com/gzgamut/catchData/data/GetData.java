@@ -93,6 +93,8 @@ public class GetData {
 						}
 						treemap.put(yearStr, new Data(stockCodeStr, yearStr,
 								researchExpenses, advertisingExpenses));
+					} else {
+						logger.info("股票代码或年份不符合条件");
 					}
 				}
 			}
@@ -109,8 +111,17 @@ public class GetData {
 	 * @return
 	 */
 	private static String getStockCode(String content) {
-		int location = content.indexOf("股票代码");
-		if (location != -1) {
+		String[] locationStr = { "股票代码", "股票简称及代码" };
+		int location = -1;
+		for (String temp : locationStr) {
+			location = content.indexOf(temp);
+			if (location != -1) {
+				break;
+			}
+		}
+		if (location == -1) {
+			return null;
+		} else {
 			String stockCode = StringHelper.replaceSpecialCharacters(content
 					.substring(location + 5, location + 20));
 			logger.info("股票代码原始数据为：" + stockCode);
@@ -118,12 +129,12 @@ public class GetData {
 			Pattern pattern = Pattern.compile("\\d{6}");
 			Matcher matcher = pattern.matcher(stockCode);
 			if (matcher.find()) {
-				return matcher.group();
+				String result = matcher.group();
+				logger.info("股票代码处理过后为：" + result);
+				return result;
 			} else {
 				return null;
 			}
-		} else {
-			return null;
 		}
 	}
 
@@ -134,16 +145,34 @@ public class GetData {
 	 * @return
 	 */
 	private static String getYear(String content) {
-		int location = content.indexOf("年年度报告");
-		if (location != -1 && location - 9 > -1) {
+		String[] locationStr = { "年度报告", "年年度报告" };
+		int location = -1;
+		for (String temp : locationStr) {
+			location = content.indexOf(temp);
+			if (location != -1) {
+				break;
+			}
+		}
+		if (location != -1 && location - 6 > -1) {
 			String year = StringHelper.replaceSpecialCharacters(content
-					.substring(location - 9, location));
+					.substring(location - 6, location));
 			logger.info("年份原始数据为：" + year);
 			// 检查是否为四位数的年份
-			Pattern pattern = Pattern.compile("\\d{4}");
+			Pattern pattern = Pattern.compile("\\d");
 			Matcher matcher = pattern.matcher(year);
-			if (matcher.find()) {
-				return matcher.group();
+			String result = "";
+			while (matcher.find()) {
+				result += matcher.group();
+			}
+			if (!result.equals("")) {
+				if (result.length() - 4 > -1) {
+					result = result.substring(result.length() - 4,
+							result.length());
+					logger.info("年份处理过后为：" + result);
+					return result;
+				} else {
+					return null;
+				}
 			} else {
 				return null;
 			}

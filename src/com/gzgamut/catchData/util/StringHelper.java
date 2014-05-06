@@ -144,9 +144,13 @@ public class StringHelper {
 		double rateResearchExpenses = countResearchExpenses / countEffective;
 		double rateAdvertisingExpenses = countAdvertisingExpenses
 				/ countEffective;
-		logger.info("合格率为：" + nFromat.format(rateQualified));
-		logger.info("有效率为：" + nFromat.format(rateEffective));
-		logger.info("研究率为：" + nFromat.format(rateResearchExpenses));
-		logger.info("广告率为：" + nFromat.format(rateAdvertisingExpenses));
+		logger.info("合格率为：" + nFromat.format(rateQualified) + "\t"
+				+ countQualified + "/" + countTotal);
+		logger.info("有效率为：" + nFromat.format(rateEffective) + "\t"
+				+ countEffective + "/" + countQualified);
+		logger.info("研究率为：" + nFromat.format(rateResearchExpenses) + "\t"
+				+ countResearchExpenses + "/" + countEffective);
+		logger.info("广告率为：" + nFromat.format(rateAdvertisingExpenses) + "\t"
+				+ countAdvertisingExpenses + "/" + countEffective);
 	}
 }
