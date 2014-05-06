@@ -1,0 +1,13 @@
+eclipse.preferences.version=1
+encoding//src/com/gzgamut/catchData/data/AnalyzePDF.java=UTF-8
+encoding//src/com/gzgamut/catchData/data/CreateTXT.java=UTF-8
+encoding//src/com/gzgamut/catchData/data/DownloadPDF.java=UTF-8
+encoding//src/com/gzgamut/catchData/data/GetPDF.java=UTF-8
+encoding//src/com/gzgamut/catchData/data/MainFile.java=UTF-8
+encoding//src/com/gzgamut/catchData/data/SwitchFile.java=UTF-8
+encoding//src/com/gzgamut/catchData/model/PDF.java=UTF-8
+encoding//src/com/gzgamut/catchData/util/Config.java=UTF-8
+encoding//src/com/gzgamut/catchData/util/GetListByFile.java=UTF-8
+encoding//src/com/gzgamut/catchData/util/GetURL.java=UTF-8
+encoding//src/com/gzgamut/catchData/util/MergeList.java=UTF-8
+encoding/<project>=UTF-8
