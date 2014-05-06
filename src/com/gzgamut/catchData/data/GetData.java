@@ -21,6 +21,11 @@ import com.gzgamut.catchData.util.Config;
 import com.gzgamut.catchData.util.FileHelper;
 import com.gzgamut.catchData.util.StringHelper;
 
+/**
+ * 
+ * @author Vincent_Melancholy
+ *
+ */
 public class GetData {
 
 	private static Logger logger = Logger.getLogger(GetData.class);
