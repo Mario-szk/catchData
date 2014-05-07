@@ -111,7 +111,8 @@ public class GetData {
 	 * @return
 	 */
 	private static String getStockCode(String content) {
-		String[] locationStr = { "股票代码", "股票简称及代码", "证券代码", "股票编号", "股 票 代 码" };
+		String[] locationStr = { "股票代码", "股票简称及代码", "证券代码", "股票编号", "股 票 代 码",
+				"股  票  代  码", "A股代码", "B股代码", "A 股代码", "B 股代码" };
 		int location = -1;
 		for (String temp : locationStr) {
 			location = content.indexOf(temp);
@@ -142,14 +143,15 @@ public class GetData {
 	 * @return
 	 */
 	private static String getYear(String content) {
-		String[] locationStr = { "年度报告", "年年度报告" };
+		String[] locationStr = { "年度报告", "年 度 报 告", "年年度报告", "年 年 度 报 告",
+				"年 度报告" };
 		int location = -1;
 		for (String temp : locationStr) {
 			location = content.indexOf(temp);
 			if (location != -1) {
-				if (location - 6 > -1) {
+				if (location - 8 > -1) {
 					String year = StringHelper.replaceSpecialCharacters(content
-							.substring(location - 6, location));
+							.substring(location - 8, location));
 					logger.info("年份原始数据为：" + year);
 					// 检查是否为四位数的年份
 					Pattern pattern = Pattern.compile("\\d");
