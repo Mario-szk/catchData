@@ -111,31 +111,27 @@ public class GetData {
 	 * @return
 	 */
 	private static String getStockCode(String content) {
-		String[] locationStr = { "股票代码", "股票简称及代码" };
+		String[] locationStr = { "股票代码", "股票简称及代码", "证券代码", "股票编号", "股 票 代 码" };
 		int location = -1;
 		for (String temp : locationStr) {
 			location = content.indexOf(temp);
 			if (location != -1) {
-				break;
+				String stockCode = StringHelper
+						.replaceSpecialCharacters(content.substring(
+								location + 5, location + 40));
+				logger.info("股票代码原始数据为：" + stockCode);
+				// 检查是否为六位数的年份
+				Pattern pattern = Pattern.compile("\\d{6}");
+				Matcher matcher = pattern.matcher(stockCode);
+				if (matcher.find()) {
+					String result = matcher.group();
+					logger.info("股票代码数据处理成功！");
+					logger.info("股票代码处理过后为：" + result);
+					return result;
+				}
 			}
 		}
-		if (location == -1) {
-			return null;
-		} else {
-			String stockCode = StringHelper.replaceSpecialCharacters(content
-					.substring(location + 5, location + 20));
-			logger.info("股票代码原始数据为：" + stockCode);
-			// 检查是否为六位数的年份
-			Pattern pattern = Pattern.compile("\\d{6}");
-			Matcher matcher = pattern.matcher(stockCode);
-			if (matcher.find()) {
-				String result = matcher.group();
-				logger.info("股票代码处理过后为：" + result);
-				return result;
-			} else {
-				return null;
-			}
-		}
+		return null;
 	}
 
 	/**
@@ -149,36 +145,27 @@ public class GetData {
 		int location = -1;
 		for (String temp : locationStr) {
 			location = content.indexOf(temp);
-			if (location != -1) {
-				break;
-			}
-		}
-		if (location != -1 && location - 6 > -1) {
-			String year = StringHelper.replaceSpecialCharacters(content
-					.substring(location - 6, location));
-			logger.info("年份原始数据为：" + year);
-			// 检查是否为四位数的年份
-			Pattern pattern = Pattern.compile("\\d");
-			Matcher matcher = pattern.matcher(year);
-			String result = "";
-			while (matcher.find()) {
-				result += matcher.group();
-			}
-			if (!result.equals("")) {
-				if (result.length() - 4 > -1) {
+			if (location != -1 && location - 6 > -1) {
+				String year = StringHelper.replaceSpecialCharacters(content
+						.substring(location - 6, location));
+				logger.info("年份原始数据为：" + year);
+				// 检查是否为四位数的年份
+				Pattern pattern = Pattern.compile("\\d");
+				Matcher matcher = pattern.matcher(year);
+				String result = "";
+				while (matcher.find()) {
+					result += matcher.group();
+				}
+				if (!result.equals("") && result.length() - 4 > -1) {
 					result = result.substring(result.length() - 4,
 							result.length());
+					logger.info("年份数据处理成功！");
 					logger.info("年份处理过后为：" + result);
 					return result;
-				} else {
-					return null;
 				}
-			} else {
-				return null;
 			}
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 	/**

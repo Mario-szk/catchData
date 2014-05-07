@@ -32,6 +32,7 @@ public class StringHelper {
 			dest = dest.replaceAll("零", "0");
 			dest = dest.replaceAll("○", "0");
 			dest = dest.replaceAll("〇", "0");
+			dest = dest.replaceAll("O", "0");
 
 			p = Pattern.compile("[\u4e00-\u9fa5]");// 汉字
 			m = p.matcher(dest);
