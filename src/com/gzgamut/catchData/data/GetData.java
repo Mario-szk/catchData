@@ -115,7 +115,7 @@ public class GetData {
 		int location = -1;
 		for (String temp : locationStr) {
 			location = content.indexOf(temp);
-			if (location != -1) {
+			while (location != -1) {
 				String stockCode = StringHelper
 						.replaceSpecialCharacters(content.substring(
 								location + 5, location + 40));
@@ -129,6 +129,7 @@ public class GetData {
 					logger.info("股票代码处理过后为：" + result);
 					return result;
 				}
+				location = content.indexOf(temp, location + 3);
 			}
 		}
 		return null;
@@ -145,24 +146,27 @@ public class GetData {
 		int location = -1;
 		for (String temp : locationStr) {
 			location = content.indexOf(temp);
-			if (location != -1 && location - 6 > -1) {
-				String year = StringHelper.replaceSpecialCharacters(content
-						.substring(location - 6, location));
-				logger.info("年份原始数据为：" + year);
-				// 检查是否为四位数的年份
-				Pattern pattern = Pattern.compile("\\d");
-				Matcher matcher = pattern.matcher(year);
-				String result = "";
-				while (matcher.find()) {
-					result += matcher.group();
+			while (location != -1) {
+				if (location - 6 > -1) {
+					String year = StringHelper.replaceSpecialCharacters(content
+							.substring(location - 6, location));
+					logger.info("年份原始数据为：" + year);
+					// 检查是否为四位数的年份
+					Pattern pattern = Pattern.compile("\\d");
+					Matcher matcher = pattern.matcher(year);
+					String result = "";
+					while (matcher.find()) {
+						result += matcher.group();
+					}
+					if (!result.equals("") && result.length() - 4 > -1) {
+						result = result.substring(result.length() - 4,
+								result.length());
+						logger.info("年份数据处理成功！");
+						logger.info("年份处理过后为：" + result);
+						return result;
+					}
 				}
-				if (!result.equals("") && result.length() - 4 > -1) {
-					result = result.substring(result.length() - 4,
-							result.length());
-					logger.info("年份数据处理成功！");
-					logger.info("年份处理过后为：" + result);
-					return result;
-				}
+				location = content.indexOf(temp, location + 3);
 			}
 		}
 		return null;
@@ -180,66 +184,64 @@ public class GetData {
 		int tax = -1;
 		for (String temp : taxStr) {
 			tax = content.indexOf(temp);
-			if (tax != -1) {
-				break;
-			}
-		}
-		if (tax == -1) {
-			return 0;
-		}
-		String[] locationStr = { "研发费用", "研发支出", "研究开发费", "技术研究费", "技术开发费",
-				"研发费", "科研费", "咨询及技术开发费" };
-		int location = -1;
-		for (String temp : locationStr) {
-			location = content.indexOf(temp, tax);
-			if (location != -1) {
-				break;
-			}
-		}
-		if (location == -1) {
-			return 0;
-		}
-		String researchExpensesStr = StringHelper
-				.replaceSpecialCharacters(content.substring(location + 3,
-						location + 34));
-		logger.info("原本的字符串为:" + researchExpensesStr);
-		String researchExpenses = "";
-		int count = 0;
-		for (int i = 0; i < researchExpensesStr.length(); i++) {
-			String character = researchExpensesStr.substring(i, i + 1);
-			if (!character.equals(",")) {
-				if (character.equals(".")) {
-					count = 0;
-					researchExpenses += character;
-					count++;
-				} else if (count == 3) {
-					break;
-				} else {
-					researchExpenses += character;
-					count++;
+			while (tax != -1) {
+				String[] locationStr = { "研发费用", "研发支出", "研究开发费", "技术研究费",
+						"技术开发费", "研发费", "科研费", "咨询及技术开发费" };
+				int location = -1;
+				for (String templocation : locationStr) {
+					location = content.indexOf(templocation, tax);
+					while (location != -1) {
+						String researchExpensesStr = StringHelper
+								.replaceSpecialCharacters(content.substring(
+										location + 3, location + 34));
+						logger.info("原本的字符串为:" + researchExpensesStr);
+						String researchExpenses = "";
+						int count = 0;
+						for (int i = 0; i < researchExpensesStr.length(); i++) {
+							String character = researchExpensesStr.substring(i,
+									i + 1);
+							if (!character.equals(",")) {
+								if (character.equals(".")) {
+									count = 0;
+									researchExpenses += character;
+									count++;
+								} else if (count == 3) {
+									break;
+								} else {
+									researchExpenses += character;
+									count++;
+								}
+							} else {
+								count = 0;
+							}
+						}
+						logger.info("处理过后的字符串为:" + researchExpenses);
+						if (!researchExpenses.equals("")) {
+							// 根据计量单位整理数据
+							String[] unitString = { "单位", "人民币" };
+							int unit = -1;
+							for (String tempunit : unitString) {
+								unit = content.lastIndexOf(tempunit, location);
+								if (unit != -1) {
+									break;
+								}
+							}
+							if (unit == -1) {
+								unit = 0;
+							}
+							String unitStr = content.substring(unit, location);
+							// 匹配单位
+							long unitResult = StringHelper.unitMatcher(
+									researchExpenses, unitStr);
+							return unitResult;
+						}
+						location = content.indexOf(templocation, location + 3);
+					}
 				}
-			} else {
-				count = 0;
+				tax = content.indexOf(temp, tax + 3);
 			}
 		}
-		logger.info("处理过后的字符串为:" + researchExpenses);
-		if (researchExpenses.equals("")) {
-			return 0;
-		} else {
-			// 根据计量单位整理数据
-			int unit = content.lastIndexOf("单位", location);
-			if (unit == -1) {
-				unit = content.lastIndexOf("人民币", location);
-				if (unit == -1) {
-					unit = 0;
-				}
-			}
-			String unitStr = content.substring(unit, location);
-			// 匹配单位
-			long unitResult = StringHelper.unitMatcher(researchExpenses,
-					unitStr);
-			return unitResult;
-		}
+		return 0;
 	}
 
 	/**
@@ -253,65 +255,63 @@ public class GetData {
 		int tax = -1;
 		for (String temp : taxStr) {
 			tax = content.indexOf(temp);
-			if (tax != -1) {
-				break;
-			}
-		}
-		if (tax == -1) {
-			return 0;
-		}
-		String[] locationStr = { "广告宣传费", "广告费用", "广告费" };
-		int location = -1;
-		for (String temp : locationStr) {
-			location = content.indexOf(temp, tax);
-			if (location != -1) {
-				break;
-			}
-		}
-		if (location == -1) {
-			return 0;
-		}
-		String advertisingExpensesStr = StringHelper
-				.replaceSpecialCharacters(content.substring(location + 4,
-						location + 34));
-		logger.info("原本的字符串为:" + advertisingExpensesStr);
-		String advertisingExpenses = "";
-		int count = 0;
-		for (int i = 0; i < advertisingExpensesStr.length(); i++) {
-			String character = advertisingExpensesStr.substring(i, i + 1);
-			if (!character.equals(",")) {
-				if (character.equals(".")) {
-					count = 0;
-					advertisingExpenses += character;
-					count++;
-				} else if (count == 3) {
-					break;
-				} else {
-					advertisingExpenses += character;
-					count++;
+			while (tax != -1) {
+				String[] locationStr = { "广告宣传费", "广告费用", "广告费" };
+				int location = -1;
+				for (String templocation : locationStr) {
+					location = content.indexOf(templocation, tax);
+					while (location != -1) {
+						String advertisingExpensesStr = StringHelper
+								.replaceSpecialCharacters(content.substring(
+										location + 4, location + 34));
+						logger.info("原本的字符串为:" + advertisingExpensesStr);
+						String advertisingExpenses = "";
+						int count = 0;
+						for (int i = 0; i < advertisingExpensesStr.length(); i++) {
+							String character = advertisingExpensesStr
+									.substring(i, i + 1);
+							if (!character.equals(",")) {
+								if (character.equals(".")) {
+									count = 0;
+									advertisingExpenses += character;
+									count++;
+								} else if (count == 3) {
+									break;
+								} else {
+									advertisingExpenses += character;
+									count++;
+								}
+							} else {
+								count = 0;
+							}
+						}
+						logger.info("处理过后的字符串为:" + advertisingExpenses);
+						if (!advertisingExpenses.equals("")) {
+							// 根据计量单位整理数据
+							String[] unitString = { "单位", "人民币" };
+							int unit = -1;
+							for (String tempunit : unitString) {
+								unit = content.lastIndexOf(tempunit, location);
+								if (unit != -1) {
+									break;
+								}
+							}
+							if (unit == -1) {
+								unit = 0;
+							}
+							String unitStr = content.substring(unit, location);
+							// 匹配单位
+							long unitResult = StringHelper.unitMatcher(
+									advertisingExpenses, unitStr);
+							return unitResult;
+						}
+						location = content.indexOf(templocation, location + 3);
+					}
 				}
-			} else {
-				count = 0;
+				tax = content.indexOf(temp, tax + 3);
 			}
 		}
-		logger.info("处理过后的字符串为:" + advertisingExpenses);
-		if (advertisingExpenses.equals("")) {
-			return 0;
-		} else {
-			// 根据计量单位整理数据
-			int unit = content.lastIndexOf("单位", location);
-			if (unit == -1) {
-				unit = content.lastIndexOf("人民币", location);
-				if (unit == -1) {
-					unit = 0;
-				}
-			}
-			String unitStr = content.substring(unit, location);
-			// 匹配单位
-			long unitResult = StringHelper.unitMatcher(advertisingExpenses,
-					unitStr);
-			return unitResult;
-		}
+		return 0;
 	}
 
 	/**
