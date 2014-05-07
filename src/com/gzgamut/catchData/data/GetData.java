@@ -146,7 +146,7 @@ public class GetData {
 		int location = -1;
 		for (String temp : locationStr) {
 			location = content.indexOf(temp);
-			while (location != -1) {
+			if (location != -1) {
 				if (location - 6 > -1) {
 					String year = StringHelper.replaceSpecialCharacters(content
 							.substring(location - 6, location));
@@ -166,7 +166,6 @@ public class GetData {
 						return result;
 					}
 				}
-				location = content.indexOf(temp, location + 3);
 			}
 		}
 		return null;
