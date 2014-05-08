@@ -239,6 +239,9 @@ public class GetData {
 						location = content.indexOf(templocation, location + 3);
 					}
 				}
+				if (temp.equals("")) {
+					break;
+				}
 				tax = content.indexOf(temp, tax + 3);
 			}
 		}
@@ -308,6 +311,9 @@ public class GetData {
 						}
 						location = content.indexOf(templocation, location + 3);
 					}
+				}
+				if (temp.equals("")) {
+					break;
 				}
 				tax = content.indexOf(temp, tax + 3);
 			}
