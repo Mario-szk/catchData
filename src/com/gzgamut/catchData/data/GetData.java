@@ -181,7 +181,7 @@ public class GetData {
 	 */
 	private static long getResearchExpenses(String content) {
 		String[] taxStr = { "支付其他与经营活动有关的现金", "支付的其他与经营活动有关的现金",
-				"其他与经营活动有关的现金", "与经营活动有关" };
+				"其他与经营活动有关的现金", "与经营活动有关", "" };
 		int tax = -1;
 		for (String temp : taxStr) {
 			tax = content.indexOf(temp);
@@ -252,7 +252,7 @@ public class GetData {
 	 * @return
 	 */
 	private static long getAdvertisingExpenses(String content) {
-		String[] taxStr = { "销售费用" };
+		String[] taxStr = { "销售费用", "" };
 		int tax = -1;
 		for (String temp : taxStr) {
 			tax = content.indexOf(temp);
