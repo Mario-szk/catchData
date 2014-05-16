@@ -73,8 +73,8 @@ public class GetData {
 						if (flag.equals("")) {
 							flag = stockCodeStr;
 						}
-						long researchExpenses = getResearchExpenses(content);
-						long advertisingExpenses = getAdvertisingExpenses(content);
+						double researchExpenses = getResearchExpenses(content);
+						double advertisingExpenses = getAdvertisingExpenses(content);
 						if (researchExpenses != 0) {
 							countResearchExpenses++;
 						}
@@ -179,7 +179,7 @@ public class GetData {
 	 * @param content
 	 * @return
 	 */
-	private static long getResearchExpenses(String content) {
+	private static double getResearchExpenses(String content) {
 		String[] taxStr = { "支付其他与经营活动有关的现金", "支付的其他与经营活动有关的现金",
 				"其他与经营活动有关的现金", "与经营活动有关", "" };
 		int tax = -1;
@@ -187,7 +187,8 @@ public class GetData {
 			tax = content.indexOf(temp);
 			while (tax != -1) {
 				String[] locationStr = { "研发费用", "研发支出", "研究开发费", "技术研究费",
-						"技术研发费", "技术开发费", "研发费", "科研费", "咨询及技术开发费", "研发成本" };
+						"技术研发费", "技术开发费", "研发费", "科研费", "咨询及技术开发费", "研发成本",
+						"开发费" };
 				int location = -1;
 				for (String templocation : locationStr) {
 					location = content.indexOf(templocation, tax);
@@ -232,7 +233,7 @@ public class GetData {
 							}
 							String unitStr = content.substring(unit, location);
 							// 匹配单位
-							long unitResult = StringHelper.unitMatcher(
+							double unitResult = StringHelper.unitMatcher(
 									researchExpenses, unitStr);
 							return unitResult;
 						}
@@ -254,13 +255,14 @@ public class GetData {
 	 * @param content
 	 * @return
 	 */
-	private static long getAdvertisingExpenses(String content) {
+	private static double getAdvertisingExpenses(String content) {
 		String[] taxStr = { "销售费用", "" };
 		int tax = -1;
 		for (String temp : taxStr) {
 			tax = content.indexOf(temp);
 			while (tax != -1) {
-				String[] locationStr = { "广告宣传费", "广告费用", "广告费", "宣传费.广告费" };
+				String[] locationStr = { "广告宣传费", "广告费用", "广告费", "宣传费.广告费",
+						"宣传费", "广告、促销费" };
 				int location = -1;
 				for (String templocation : locationStr) {
 					location = content.indexOf(templocation, tax);
@@ -305,7 +307,7 @@ public class GetData {
 							}
 							String unitStr = content.substring(unit, location);
 							// 匹配单位
-							long unitResult = StringHelper.unitMatcher(
+							double unitResult = StringHelper.unitMatcher(
 									advertisingExpenses, unitStr);
 							return unitResult;
 						}
@@ -334,8 +336,8 @@ public class GetData {
 			Data value = treemap.get(key);
 			String stockCode = value.getStockCode();
 			String year = value.getYear();
-			long researchExpenses = value.getResearchExpenses();
-			long advertisingExpenses = value.getAdvertisingExpenses();
+			double researchExpenses = value.getResearchExpenses();
+			double advertisingExpenses = value.getAdvertisingExpenses();
 			writeToExcel(stockCode, year, researchExpenses, advertisingExpenses);
 		}
 	}
@@ -353,7 +355,7 @@ public class GetData {
 	 *            广告费用
 	 */
 	private static void writeToExcel(String company, String year,
-			long rearchExpenses, long advertisingExpenses) {
+			double rearchExpenses, double advertisingExpenses) {
 		// 打开文件
 		WritableWorkbook book = null;
 		try {

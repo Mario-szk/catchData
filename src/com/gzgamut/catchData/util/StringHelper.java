@@ -70,12 +70,13 @@ public class StringHelper {
 	 * @param unitStr
 	 * @return
 	 */
-	public static long unitMatcher(String numString, String unitStr) {
-		long result = 0;
+	public static double unitMatcher(String numString, String unitStr) {
+		double result = 0;
 		try {
-			result = Long.parseLong(numString);
+			result = Double.parseDouble(numString);
 		} catch (NumberFormatException e) {
 			// 如果格式错误，则返回0
+			logger.info("数字格式错误，原来的数字为：" + numString);
 			return 0;
 		}
 		String unitResult = null;

@@ -4,11 +4,11 @@ public class Data {
 
 	private String stockCode;
 	private String year;
-	private long researchExpenses;
-	private long advertisingExpenses;
+	private double researchExpenses;
+	private double advertisingExpenses;
 
-	public Data(String stockCode, String year, long researchExpenses,
-			long advertisingExpenses) {
+	public Data(String stockCode, String year, double researchExpenses,
+			double advertisingExpenses) {
 		this.stockCode = stockCode;
 		this.year = year;
 		this.researchExpenses = researchExpenses;
@@ -31,19 +31,19 @@ public class Data {
 		this.year = year;
 	}
 
-	public long getResearchExpenses() {
+	public double getResearchExpenses() {
 		return researchExpenses;
 	}
 
-	public void setResearchExpenses(long researchExpenses) {
+	public void setResearchExpenses(double researchExpenses) {
 		this.researchExpenses = researchExpenses;
 	}
 
-	public long getAdvertisingExpenses() {
+	public double getAdvertisingExpenses() {
 		return advertisingExpenses;
 	}
 
-	public void setAdvertisingExpenses(long advertisingExpenses) {
+	public void setAdvertisingExpenses(double advertisingExpenses) {
 		this.advertisingExpenses = advertisingExpenses;
 	}
 }
