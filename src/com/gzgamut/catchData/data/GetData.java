@@ -220,16 +220,20 @@ public class GetData {
 						logger.info("处理过后的字符串为:" + researchExpenses);
 						if (!researchExpenses.equals("")) {
 							// 根据计量单位整理数据
-							String[] unitString = { "单位", "人民币" };
+							String[] unitString = { "表", "图", "附", "注", "单位",
+									"人民币" };
 							int unit = -1;
+							int high_unit = -1;
 							for (String tempunit : unitString) {
 								unit = content.lastIndexOf(tempunit, location);
-								if (unit != -1) {
-									break;
+								if (unit > high_unit) {
+									high_unit = unit;
 								}
 							}
-							if (unit == -1) {
+							if (high_unit == -1) {
 								unit = 0;
+							} else {
+								unit = high_unit;
 							}
 							String unitStr = content.substring(unit, location);
 							// 匹配单位
@@ -294,16 +298,20 @@ public class GetData {
 						logger.info("处理过后的字符串为:" + advertisingExpenses);
 						if (!advertisingExpenses.equals("")) {
 							// 根据计量单位整理数据
-							String[] unitString = { "单位", "人民币" };
+							String[] unitString = { "表", "图", "附", "注", "单位",
+									"人民币" };
 							int unit = -1;
+							int high_unit = -1;
 							for (String tempunit : unitString) {
 								unit = content.lastIndexOf(tempunit, location);
-								if (unit != -1) {
-									break;
+								if (unit > high_unit) {
+									high_unit = unit;
 								}
 							}
-							if (unit == -1) {
+							if (high_unit == -1) {
 								unit = 0;
+							} else {
+								unit = high_unit;
 							}
 							String unitStr = content.substring(unit, location);
 							// 匹配单位
