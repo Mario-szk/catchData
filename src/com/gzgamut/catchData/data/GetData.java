@@ -187,7 +187,7 @@ public class GetData {
 			tax = content.indexOf(temp);
 			while (tax != -1) {
 				String[] locationStr = { "研发费用", "研发支出", "研究开发费", "技术研究费",
-						"技术开发费", "研发费", "科研费", "咨询及技术开发费" };
+						"技术研发费", "技术开发费", "研发费", "科研费", "咨询及技术开发费", "研发成本" };
 				int location = -1;
 				for (String templocation : locationStr) {
 					location = content.indexOf(templocation, tax);
@@ -260,7 +260,7 @@ public class GetData {
 		for (String temp : taxStr) {
 			tax = content.indexOf(temp);
 			while (tax != -1) {
-				String[] locationStr = { "广告宣传费", "广告费用", "广告费" };
+				String[] locationStr = { "广告宣传费", "广告费用", "广告费", "宣传费.广告费" };
 				int location = -1;
 				for (String templocation : locationStr) {
 					location = content.indexOf(templocation, tax);

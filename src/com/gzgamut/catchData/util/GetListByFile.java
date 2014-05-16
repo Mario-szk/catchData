@@ -35,9 +35,9 @@ public class GetListByFile {
 					list.add(result);
 					count++;
 				}
-				if (count > 3) {
-					break;
-				}
+				// if (count > 3) {
+				// break;
+				// }
 			}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
